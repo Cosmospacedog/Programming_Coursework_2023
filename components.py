@@ -4,6 +4,12 @@ function of the Game
 '''
 from random import randint
 from json import load
+import logging
+logging.basicConfig(
+    filename='Battleships.log',
+    filemode='a',
+    level=logging.INFO,
+    format='%(name)s - %(levelname)s - %(message)s')
 
 def initialise_board(
     size=10
@@ -18,6 +24,9 @@ def initialise_board(
         ]
         for i in range (size)
     ]
+    logging.info(
+        'Board successfully generated'
+        )
     return board
 
 
@@ -46,6 +55,9 @@ def create_battleships(
                 line[1]
                 )
     #saves ship data to a dictionary.
+    logging.info(
+        'Ships successfully generated'
+        )
     return ship_dict
 
 def simple_placement(board,ships):
@@ -65,6 +77,9 @@ def simple_placement(board,ships):
                     i
                     ] = ship
         row += 1
+    logging.info(
+        'Simple placement successfully generated'
+        )
     return board
 
 def random_placement(board,ships):
@@ -129,6 +144,9 @@ def random_placement(board,ships):
                     position[0]
                     ] = ship
             #places a ship vertically
+    logging.info(
+        'Random placement successfully generated'
+        )
     return board
 
 def custom_placement(board,ships):
@@ -157,6 +175,9 @@ def custom_placement(board,ships):
                     int(data[ship][0])
                     ] = ship
         #if the ship is vertical, place accordingly.
+    logging.info(
+        'Custom Placement successfully generated'
+        )
     return board
 
 def place_battleships(
@@ -173,4 +194,8 @@ def place_battleships(
         'simple':simple_placement,
         'random':random_placement,
     }
+    logging.info(
+        'Placement mode %s selected',
+        algorithm
+        )
     return options[algorithm](board,ships)

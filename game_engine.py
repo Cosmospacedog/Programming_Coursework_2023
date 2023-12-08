@@ -3,7 +3,14 @@ This module contains the code for controlling the
 game backend as well as a command line GUI for
 playing.
 '''
+import logging
 from components import initialise_board,create_battleships,place_battleships
+
+logging.basicConfig(
+    filename='Battleships.log',
+    filemode='a',
+    level=logging.INFO,
+    format='%(name)s - %(levelname)s - %(message)s')
 
 def attack(coordinates:tuple,board:list,battleships:dict):
     '''
@@ -22,8 +29,20 @@ def attack(coordinates:tuple,board:list,battleships:dict):
             item_on_space
             ] == 0:
             #check if the ship has no more pieces
+            logging.info(
+                'Player sunk ship at %s',
+                coordinates
+            )
             return 'Sunk!',battleships
+        logging.info(
+                'Player hit ship at %s',
+                coordinates
+            )
         return 'Hit!',battleships
+    logging.info(
+        'Player missed at %s',
+        coordinates
+    )
     return 'Miss!',battleships
 
 def cli_coordinates_input(board:list=initialise_board(10)):
@@ -32,15 +51,23 @@ def cli_coordinates_input(board:list=initialise_board(10)):
     via the command line.
     '''
     while True:
-        coordinates = tuple(
-            int(i) for i in input(
-            'Please input co-ordinates separated by a comma (x,y):'
-        ).split(',')
-        )
+        try:
+            coordinates = tuple(
+                int(i) for i in input(
+                'Please input co-ordinates separated by a comma (x,y):'
+            ).split(',')
+            )
+            try:
+                if len(board) >= coordinates[0] and len(board[0]) >= coordinates[1]:
+                    #check if the coordinates are in a valid range.
+                    break
+                logging.error('Coordinates out of range')
+            except IndexError:
+                logging.error('Only one coordinate provided')
+        except ValueError:
+            logging.error('Invalid coordinate input')
         #Recieves and proccess coordinates.
-        if len(board) >= coordinates[0] and len(board[0]) >= coordinates[1]:
-            #check if the coordinates are in a valid range.
-            break
+
     return coordinates
 
 def simple_game_loop():
@@ -91,6 +118,9 @@ def showboard(board:list,past_moves:list=None):
         ]
     print('Your Board:')
     print(f'\n{"-" * len(display_board[0])}\n'.join(display_board))
+    logging.info(
+        'board successfully displayed'
+    )
 
 if __name__ == '__main__':
     simple_game_loop()
