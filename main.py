@@ -1,11 +1,22 @@
 '''
 This Script handles the backend using flask
 '''
+import logging
 from json import dump
 from flask import render_template,request,Flask
 from game_engine import attack
 from components import initialise_board,create_battleships,place_battleships
 from mp_game_engine import generate_attack
+
+logging.basicConfig(
+    filename='Battleships.log',
+    filemode='a',
+    level=logging.INFO,
+    format='%(name)s - %(levelname)s - %(message)s')
+
+
+#TODO Smart AI
+#TODO Tell user their placement is invalid
 
 class WebGame:
     '''
@@ -19,6 +30,7 @@ class WebGame:
         self.size = size
         self.ships = create_battleships()
         self.players = None
+        
     def process_attack(self,raw_data):
         '''
         proccesses an attack from the front end and returns

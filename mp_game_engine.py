@@ -3,9 +3,18 @@ This module controls an automated player and runs
 a simple command-liine game against them when ran as
 main
 '''
+import logging
 from random import randint
 from components import initialise_board,create_battleships,place_battleships
 from game_engine import cli_coordinates_input,showboard,attack
+
+
+logging.basicConfig(
+    filename='Battleships.log',
+    filemode='a',
+    level=logging.INFO,
+    format='%(name)s - %(levelname)s - %(message)s')
+
 
 def simple_attack(
     past_attacks:list,
@@ -26,6 +35,8 @@ def simple_attack(
                    randint(0,len(board) -1)
                    )
     past_attacks.append(command)
+    logging.info('AI generated attack %s',
+                 command)
     return command,past_attacks
 
 def generate_attack(
@@ -113,6 +124,8 @@ def ai_opponent_game_loop(names=('player1','AI')):
                 players[names[i - 1]][1][ship] for ship in players[names[i - 1]][1]
                 ) ==0:
                 winner = names[i]
+    logging.info('%s won',
+                 winner)
     print(winner)
 
 players = {}
