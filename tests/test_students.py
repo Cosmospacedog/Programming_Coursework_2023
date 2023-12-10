@@ -394,7 +394,7 @@ def test_attack_exists():
     """
     try:
         main_module = importlib.import_module('main')
-        assert hasattr(main_module, 'process_attack'), "process_attack function does not exist"
+        assert hasattr(main_module.WebGame, 'process_attack'), "process_attack function does not exist"
     except AssertionError:
         testReport.add_message("process_attack function does not exist in your solution.")
         pytest.fail("process_attack function does not exist")

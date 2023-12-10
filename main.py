@@ -7,7 +7,7 @@ from flask import render_template,request,Flask
 from game_engine import attack
 from components import initialise_board,create_battleships,place_battleships
 from mp_game_engine import generate_attack
-import Battleships_ai
+from battleships_ai import AIPlayer
 #Configure Logs to go to file
 logging.basicConfig(
     filename='Battleships.log',
@@ -24,7 +24,7 @@ class WebGame:
         creates a new web game of a given size
         '''
         #initialise necessary values and create player instances
-        self.aiplayer = Battleships_ai.AI_Player(10)
+        self.aiplayer = AIPlayer(size)
         self.winstate = None
         self.size = size
         self.ships = create_battleships()
@@ -66,12 +66,13 @@ class WebGame:
         else:
             self.aiplayer.proccessattack(ai_coords[0],ai_coords[1],-1)
         self.winstate = self.check_winner()
+        #If the game has ended, select the winner
         if self.winstate is not None:
             response['finished'] = f"{self.winstate} Wins!"
         return response
     def shoot(self,coords:tuple,player:str,target:str):
         '''
-        Proccesses an attack on a given target's board,
+        Processes an attack on a given target's board,
         and stores the initial coordinates in the players
         past attack array.
         '''
@@ -82,6 +83,7 @@ class WebGame:
                 self.players[target][0],
                 self.players[target][1]
                 )
+        #append coordinates to the shot log
         self.players[player][2].append(coords)
         if message != 'Miss!':
             return True
@@ -91,6 +93,8 @@ class WebGame:
         Generates an attack based on previous hit data.
         '''
         if self.algorithm == 'simple':
+            #returns a random shot if the algorithm is set
+            #to simple
             coords,self.players[
                 player
                 ][2] = generate_attack(
@@ -100,6 +104,8 @@ class WebGame:
                     )
             return coords
         if self.algorithm == 'complex':
+            #gets a predicted shot if the algorithm is set to
+            #complex
             return self.aiplayer.attack()
         logging.error('Invalid algorithm %s',self.algorithm)
         return None
@@ -108,6 +114,8 @@ class WebGame:
         Checks to see if there are any players with no
         ships left, and if so returns a winner.
         '''
+        #checks to see if any players have ships with values
+        #greater than 0
         for player_name,player_data in self.players.items():
             if sum(
                 shiplength for ship,shiplength in player_data[1].items()
@@ -120,7 +128,9 @@ class WebGame:
         '''
         Generates a new game when the page is refreshed.
         '''
-        self.aiplayer = Battleships_ai.AI_Player(10)
+        #sets all values changed since initialization
+        #to their starting points
+        self.aiplayer = AIPlayer(self.size)
         self.winstate = None
         self.players = {
             'Player':[
@@ -145,9 +155,10 @@ class WebGame:
 
 def process_placement(raw_data):
     '''
-    Proccesses requests from the placement webpage
+    Processes requests from the placement webpage
     and dumps them to file.
     '''
+    #opens a json file and makes data dump
     with open('placement.json','w',encoding="utf-8") as data:
         dump(raw_data.json,data)
         return {}
@@ -157,19 +168,22 @@ GAME = WebGame(10)
 app = Flask(__name__)
 
 @app.route('/placement')
-def placement_interface():
+def placement_interface(methods=['POST','GET']):
     '''
     Render the ship placement template with appropriate
     paramiters.
     '''
+    #When a placement url is requested, push the appropriate webpage
     return render_template('shipPlacement.html',board_size = GAME.size,ships = GAME.ships)
 
 @app.route('/', methods=['POST','GET'])
 def root():
     '''
     Set the main page to the main template, initialise a game
-    and render appropriatley.
+    and render appropriately.
     '''
+    #When the root url is refreshed or requested, refresh the
+    #game object and push the homepage
     GAME.newgame()
     return render_template('main.html',player_board=GAME.players['Player'][0])
 
@@ -178,6 +192,8 @@ def process(request_id):
     '''
     process requests with the appropriate method
     '''
+    #Select an option based on the type of request
+    #made
     options = {
         'attack':GAME.process_attack,
         'placement':process_placement
@@ -185,4 +201,5 @@ def process(request_id):
     return options[request_id](request)
 
 if __name__ == "__main__":
+    #Initialize the app if the script is run as main
     app.run()
