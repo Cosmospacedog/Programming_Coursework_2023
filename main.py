@@ -7,30 +7,29 @@ from flask import render_template,request,Flask
 from game_engine import attack
 from components import initialise_board,create_battleships,place_battleships
 from mp_game_engine import generate_attack
-
+import Battleships_ai
+#Configure Logs to go to file
 logging.basicConfig(
     filename='Battleships.log',
     filemode='a',
     level=logging.INFO,
     format='%(name)s - %(levelname)s - %(message)s')
 
-
-#TODO Smart AI
-#TODO Tell user their placement is invalid
-
 class WebGame:
     '''
     This class Handles The game for the backend
     '''
-    def __init__ (self,size:int):
+    def __init__ (self,size:int,algorothm = 'complex') -> None:
         '''
         creates a new web game of a given size
         '''
+        #initialise necessary values and create player instances
+        self.aiplayer = Battleships_ai.AI_Player(10)
         self.winstate = None
         self.size = size
         self.ships = create_battleships()
-        self.players = None
-        
+        self.players = None  
+        self.algorithm = algorothm
     def process_attack(self,raw_data):
         '''
         proccesses an attack from the front end and returns
@@ -39,24 +38,33 @@ class WebGame:
         is. This function will return Nothing if the given
         coordinates have already been played.
         '''
+        #get request arguments and extract necessary values
         data = raw_data.args
         coords = (int(data.get('x')), int(data.get('y')))
         response = {}
+        #check if the square has been played before, and
+        #if so do nothing
         if coords in self.players['Player'][2]:
-            print('passed')
             return None
+        #get the success of the player's shot
         hitstate = self.shoot(coords,
                               'Player',
                               'AI'
                               )
         response['hit'] = hitstate
+        #request a shot from the AI
         ai_coords = self.get_ai_shot('AI')
         response['AI_Turn'] = ai_coords
-        self.shoot(
-            ai_coords,
-            'AI',
-            'Player'
-            )
+        aihitstate = self.shoot(
+                ai_coords,
+                'AI',
+                'Player'
+                )
+        #tells the AI the success of its shot
+        if aihitstate:
+            self.aiplayer.proccessattack(ai_coords[0],ai_coords[1],1)
+        else:
+            self.aiplayer.proccessattack(ai_coords[0],ai_coords[1],-1)
         self.winstate = self.check_winner()
         if self.winstate is not None:
             response['finished'] = f"{self.winstate} Wins!"
@@ -82,14 +90,19 @@ class WebGame:
         '''
         Generates an attack based on previous hit data.
         '''
-        coords,self.players[
-            player
-            ][2] = generate_attack(
-                self.players[player][0],
-                past_attacks=self.players[player][2],
-                algorithm='simple'
-                )
-        return coords
+        if self.algorithm == 'simple':
+            coords,self.players[
+                player
+                ][2] = generate_attack(
+                    self.players[player][0],
+                    past_attacks=self.players[player][2],
+                    algorithm='simple'
+                    )
+            return coords
+        if self.algorithm == 'complex':
+            return self.aiplayer.attack()
+        logging.error('Invalid algorithm %s',self.algorithm)
+        return None
     def check_winner(self):
         '''
         Checks to see if there are any players with no
@@ -107,6 +120,7 @@ class WebGame:
         '''
         Generates a new game when the page is refreshed.
         '''
+        self.aiplayer = Battleships_ai.AI_Player(10)
         self.winstate = None
         self.players = {
             'Player':[
