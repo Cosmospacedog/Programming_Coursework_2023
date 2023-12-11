@@ -62,7 +62,7 @@ class AIPlayer:
                     bestmove = (i,j)
                     bestscore = value
         return bestmove,bestscore
-    def proccessattack(self,y_coords,x_coords,success):
+    def proccessattack(self,y_coords:int,x_coords:int,success:int) -> None:
         '''
         process the result of a shot and
         check if a change of mode is 
@@ -75,7 +75,7 @@ class AIPlayer:
             logging.info('AI switching to destroy mode')
             self.mode[0] = 'destroy'
             self.mode[1] = (y_coords,x_coords)
-    def get_positions(self,ship):
+    def get_positions(self,ship:int) -> None:
         '''
         get all valid positions on the board for a single ship
         '''
@@ -84,14 +84,14 @@ class AIPlayer:
                 for direction in ['vertical','horizontal']:
                     if self.validmove[direction](i,j,ship):
                         self.updateoptions[direction](i,j,ship)
-    def generateoptions(self):
+    def generateoptions(self) -> list:
         '''
         updates the option board with all possible ship locations
         '''
         for _, length in self.ships.items():
             self.get_positions(length)
         return self.probability
-    def checkvertical(self,y_coords,x_coords,ship):
+    def checkvertical(self,y_coords:int,x_coords:int,ship:int) -> bool:
         '''
         Checks to see if the ship position
         is valid if directed vertically
@@ -118,7 +118,7 @@ class AIPlayer:
                 )}:
             return False
         return True
-    def checkhorizontal(self,y_coords,x_coords,ship):
+    def checkhorizontal(self,y_coords:int,x_coords:int,ship:int) -> bool:
         '''
         Checks to see if the ship position
         is valid if directed vertically
@@ -145,21 +145,21 @@ class AIPlayer:
                 )}:
             return False
         return True
-    def placevertical(self,y_coords,x_coords,ship):
+    def placevertical(self,y_coords:int,x_coords:int,ship:int) -> None:
         '''
         Update the probability board with a vertical
         placement
         '''
         for i in range(y_coords,y_coords + ship):
             self.probability[i][x_coords] += 1
-    def placehorizontal(self,y_coords,x_coords,ship):
+    def placehorizontal(self,y_coords:int,x_coords:int,ship:int) -> None:
         '''
         Update the probability board with a Horizontal
         placement
         '''
         for i in range(x_coords,x_coords + ship):
             self.probability[y_coords][i] += 1
-    def attack(self):
+    def attack(self) -> tuple:
         '''
         Generate an attack
         '''
@@ -178,7 +178,7 @@ class AIPlayer:
         self.probability = [[0 for i in range(0,self.size)]
                               for j in range(0,self.size)]
         return bestmove
-    def polaritycheck(self,y_coords,x_coords):
+    def polaritycheck(self,y_coords:int,x_coords:int) -> None:
         '''
         Check if a move has correct polarity
         This as done only every other square
