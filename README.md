@@ -3,7 +3,7 @@
 
 This is my coursework for the 2023 ECM1400 programming module.  
 
-This Readme is written in sphinx markdown and requires a proper interpreter to read.
+This Readme is written in markdown and is designed to be viewed in github or an appropriate interpreter.
 
 ## Demo
 
@@ -68,7 +68,49 @@ In order to Configure ship placement,open http://127.0.0.1:5000/placement, this 
 After placing Ships and selecting the 'Send Game' Button you willl be redirected  to the main page, where you can play the game.
 
 ![App Screenshot](https://imgur.com/IncxVqK.png)
+## Manual Ship Configuration
+Ship data  is stored as plaintext in the file 'battleships.txt'. Its formatting follows this structure:
+```
+  Ship1:length1
+  ship2:length2
+```
+Pacement data is stored in JSON formatting in the file 'placement.json'. Its formatting follows this structure:
+```json
+  {"Ship1":["y","x","h"],"Ship2":["y","x","v"]}
+```
+where x and y are the starting co-ordinates of each ship, and h or v represent weather or not it is placed  vertically or horizontally.
+
+## AI Operation
+
+The complex AI player is controlled by the battleships_ai module. It operates via the SPD algorithm. This means it generates all of the viable ship positionis on a given board, and finds the square where they most  overlap.  
+
+Initially the AI begins in searching mode, where it searcches the entire board. However, once it obtains a hit, it enters destroy mode, and only searches for configurations which include the hit space. Once there are no more combinations that allign with the space that have not been hit, it returns to search mode.
+
+Additionally, the AI considers hit polarity while searching. This allows the AI to search twice as fast as you only need consider half of the squares on board when searching, due to the fact that at least one square of each ship will appear in squares of one polarity. This feature is disengaged once destroy mode is enabled.
+
+To generate an attack use the 'attack' function eg:
+```python
+from battleships_ai AIPlayer
+
+player = AIPlayer(10)
+print (player.attack())
+```
+
+Then update the model based on the responce, with either a value of 1 for a 'hit' or -1 for a 'miss', using the 'proccessattack' function eg:
+```python
+player.proccessattack(y,x,1)
+```
+where y and x are the coordinates of the attack
+## Testing
+Tests written using pytest can be found in the 'Tests' folder.If you are using an IDE such as VSC, or pycharm, the IDE will be able to aoutomatically configure to run these tests.
+
 ## License
 
 [MIT](https://choosealicense.com/licenses/mit/)
 
+
+## Authors
+
+- Python Backend, Additional Testing - Alex Burnett 
+
+- Provided Testing Functions, Html Templates - The University of Exeter, Billy Thornton, Matt Collison

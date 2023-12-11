@@ -11,7 +11,7 @@ from battleships_ai import AIPlayer
 #Configure Logs to go to file
 logging.basicConfig(
     filename='Battleships.log',
-    filemode='w',
+    filemode='a',
     level=logging.INFO,
     format='%(name)s - %(levelname)s - %(message)s')
 
@@ -162,7 +162,7 @@ def process_placement(raw_data):
     with open('placement.json','w',encoding="utf-8") as data:
         dump(raw_data.json,data)
         return {}
-
+#change value to set size and algorithm
 GAME = WebGame(10)
 
 app = Flask(__name__)
