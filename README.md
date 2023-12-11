@@ -13,7 +13,7 @@ This Readme is written in markdown and is designed to be viewed in github or an 
 
 Compatible with python 3.7+  
 
-Packeges Used:
+Packages Used:
 - flask
 - numpy
 - PyTest
@@ -29,7 +29,7 @@ Or with Python installed to path:
   pip install numpy flask pytest
 ```
 
-4 weeks post deadline, installation will be avaliable via:
+4 weeks post deadline, installation will be available via:
 ```bash
   pip install git+https://github.com/Cosmospacedog/Programming_Coursework_2023.git
 ```
@@ -65,7 +65,7 @@ In order to Configure ship placement,open http://127.0.0.1:5000/placement, this 
 
 ![App Screenshot](https://imgur.com/Kq63FMI.png)  
 
-After placing Ships and selecting the 'Send Game' Button you willl be redirected  to the main page, where you can play the game.
+After placing Ships and selecting the 'Send Game' Button you will be redirected  to the main page, where you can play the game.
 
 ![App Screenshot](https://imgur.com/IncxVqK.png)
 ## Manual Ship Configuration
@@ -74,7 +74,7 @@ Ship data  is stored as plaintext in the file 'battleships.txt'. Its formatting 
   Ship1:length1
   ship2:length2
 ```
-Pacement data is stored in JSON formatting in the file 'placement.json'. Its formatting follows this structure:
+Placement data is stored in JSON formatting in the file 'placement.json'. Its formatting follows this structure:
 ```json
   {"Ship1":["y","x","h"],"Ship2":["y","x","v"]}
 ```
@@ -82,9 +82,9 @@ where x and y are the starting co-ordinates of each ship, and h or v represent w
 
 ## AI Operation
 
-The complex AI player is controlled by the battleships_ai module. It operates via the SPD algorithm. This means it generates all of the viable ship positionis on a given board, and finds the square where they most  overlap.  
+The complex AI player is controlled by the battleships_ai module. It operates via the SPD algorithm. This means it generates all of the viable ship positions on a given board, and finds the square where they most  overlap.  
 
-Initially the AI begins in searching mode, where it searcches the entire board. However, once it obtains a hit, it enters destroy mode, and only searches for configurations which include the hit space. Once there are no more combinations that allign with the space that have not been hit, it returns to search mode.
+Initially the AI begins in searching mode, where it searches the entire board. However, once it obtains a hit, it enters destroy mode, and only searches for configurations which include the hit space. Once there are no more combinations that align with the space that have not been hit, it returns to search mode.
 
 Additionally, the AI considers hit polarity while searching. This allows the AI to search twice as fast as you only need consider half of the squares on board when searching, due to the fact that at least one square of each ship will appear in squares of one polarity. This feature is disengaged once destroy mode is enabled.
 
@@ -96,13 +96,13 @@ player = AIPlayer(10)
 print (player.attack())
 ```
 
-Then update the model based on the responce, with either a value of 1 for a 'hit' or -1 for a 'miss', using the 'proccessattack' function eg:
+Then update the model based on the response, with either a value of 1 for a 'hit' or -1 for a 'miss', using the 'proccessattack' function eg:
 ```python
 player.proccessattack(y,x,1)
 ```
 where y and x are the coordinates of the attack
 ## Testing
-Tests written using pytest can be found in the 'Tests' folder.If you are using an IDE such as VSC, or pycharm, the IDE will be able to aoutomatically configure to run these tests.
+Tests written using pytest can be found in the 'Tests' folder.If you are using an IDE such as VSC, or pycharm, the IDE will be able to automatically configure to run these tests.
 
 ## License
 
