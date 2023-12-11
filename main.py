@@ -30,7 +30,46 @@ class WebGame:
         self.ships = create_battleships()
         self.players = None  
         self.algorithm = algorothm
-
+    def process_attack(self,raw_data):
+        '''
+        proccesses an attack from the front end and returns
+        a dictionary containing the next AI move, Hit data
+        and, in the case of a winning state, who the winner
+        is. This function will return Nothing if the given
+        coordinates have already been played.
+        '''
+        #get request arguments and extract necessary values
+        data = raw_data.args
+        coords = (int(data.get('x')), int(data.get('y')))
+        response = {}
+        #check if the square has been played before, and
+        #if so do nothing
+        if coords in self.players['Player'][2]:
+            return None
+        #get the success of the player's shot
+        hitstate = self.shoot(coords,
+                              'Player',
+                              'AI'
+                              )
+        response['hit'] = hitstate
+        #request a shot from the AI
+        ai_coords = self.get_ai_shot('AI')
+        response['AI_Turn'] = ai_coords
+        aihitstate = self.shoot(
+                ai_coords,
+                'AI',
+                'Player'
+                )
+        #tells the AI the success of its shot
+        if aihitstate:
+            self.aiplayer.proccessattack(ai_coords[0],ai_coords[1],1)
+        else:
+            self.aiplayer.proccessattack(ai_coords[0],ai_coords[1],-1)
+        self.winstate = self.check_winner()
+        #If the game has ended, select the winner
+        if self.winstate is not None:
+            response['finished'] = f"{self.winstate} Wins!"
+        return response
     def shoot(self,coords:tuple,player:str,target:str):
         '''
         Processes an attack on a given target's board,

@@ -102,7 +102,9 @@ player.proccessattack(y,x,1)
 ```
 where y and x are the coordinates of the attack
 ## Testing
-Tests written using pytest can be found in the 'Tests' folder.If you are using an IDE such as VSC, or pycharm, the IDE will be able to automatically configure to run these tests.
+Tests written using pytest can be found in the 'Tests' folder.If you are using an IDE such as VSC, or pycharm, the IDE will be able to automatically configure to run these tests.  
+
+The 'Test Attack Exists' section of the main script will fail testing due to the fact that it is written in a class-based style, if you edit the test to change its scope to main.WebApp it will work fine.
 
 ## License
 
