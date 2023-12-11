@@ -11,7 +11,7 @@ from battleships_ai import AIPlayer
 #Configure Logs to go to file
 logging.basicConfig(
     filename='Battleships.log',
-    filemode='a',
+    filemode='w',
     level=logging.INFO,
     format='%(name)s - %(levelname)s - %(message)s')
 
@@ -194,6 +194,7 @@ def process(request_id):
     '''
     #Select an option based on the type of request
     #made
+    logging.info('Got request: %s',request_id)
     options = {
         'attack':GAME.process_attack,
         'placement':process_placement

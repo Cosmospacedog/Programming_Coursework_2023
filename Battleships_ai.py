@@ -7,11 +7,6 @@ and selects the most probable
 import logging
 from numpy import array
 from components import initialise_board,create_battleships
-logging.basicConfig(
-    filename='Battleships.log',
-    filemode='a',
-    level=logging.INFO,
-    format='%(name)s - %(levelname)s - %(message)s')
 
 class AIPlayer:
     '''
