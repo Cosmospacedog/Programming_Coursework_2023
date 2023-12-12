@@ -19,7 +19,7 @@ logging.basicConfig(
 def simple_attack(
     past_attacks:list,
     board:list
-    ):
+    ) -> (tuple,list):
     '''
     Generate a simple attack at a random
     position
@@ -43,7 +43,7 @@ def generate_attack(
         board:list=initialise_board(10),
         past_attacks:list=None,
         algorithm:str='simple'
-        ):
+        ) -> (tuple,list):
     '''
     Return a choice of shot based on a given algorithm.
     '''
@@ -55,7 +55,8 @@ def generate_attack(
     return options[algorithm](past_attacks,board)
 
 
-def ai_opponent_game_loop(names=('player1','AI')):
+def ai_opponent_game_loop(names:tuple=('player1','AI')
+                          ) -> None:
     '''
     Creates A basic game loop using a simple command line gui
     and the random Ai playstyle.

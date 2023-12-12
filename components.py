@@ -12,8 +12,8 @@ logging.basicConfig(
     format='%(name)s - %(levelname)s - %(message)s')
 
 def initialise_board(
-    size=10
-    ):
+    size:int=10
+    ) -> list:
     '''
     Generates a board within a given scale.
     ie: initialise_board(10) will return a 10x 10 array
@@ -31,8 +31,8 @@ def initialise_board(
 
 
 def create_battleships(
-        filename='battleships.txt'
-        ):
+        filename:str='battleships.txt'
+        ) -> dict:
     '''
     Returns a dictionary containing ships and their
     appropriate sizes according to a txt file.
@@ -60,7 +60,9 @@ def create_battleships(
         )
     return ship_dict
 
-def simple_placement(board,ships):
+def simple_placement(board:list,
+                     ships:dict
+                     ) -> list:
     '''
     places each ship at the beginning of each row
     until no more ships are alliable.
@@ -82,7 +84,9 @@ def simple_placement(board,ships):
         )
     return board
 
-def random_placement(board,ships):
+def random_placement(board:list,
+                     ships:dict
+                     ) ->list:
     '''
     places each ship at a random position, pointing
     in a random direction.
@@ -149,7 +153,9 @@ def random_placement(board,ships):
         )
     return board
 
-def custom_placement(board,ships):
+def custom_placement(board:list,
+                     ships:dict
+                     ) -> list:
     '''
     Loads and uses placement options from a JSON file.
     This file is named 'placement.json' and should be
@@ -181,10 +187,10 @@ def custom_placement(board,ships):
     return board
 
 def place_battleships(
-        board,
-        ships,
-        algorithm='simple'
-        ):
+        board:list,
+        ships:dict,
+        algorithm:str='simple'
+        ) -> list:
     '''
     Places battleships on a provided array according
     to the users choice.

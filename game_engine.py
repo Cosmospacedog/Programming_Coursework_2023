@@ -12,7 +12,10 @@ logging.basicConfig(
     level=logging.INFO,
     format='%(name)s - %(levelname)s - %(message)s')
 
-def attack(coordinates:tuple,board:list,battleships:dict):
+def attack(coordinates:tuple,
+           board:list,
+           battleships:dict
+           ) -> (str,dict):
     '''
     Compare an input co-ordinate with a given game
     board and return a string indicating how successful
@@ -45,7 +48,8 @@ def attack(coordinates:tuple,board:list,battleships:dict):
     )
     return 'Miss!',battleships
 
-def cli_coordinates_input(board:list=initialise_board(10)):
+def cli_coordinates_input(board:list=initialise_board(10)
+                          ) -> tuple:
     '''
     Receives co-ordinate inputs from a human
     via the command line.
@@ -70,7 +74,7 @@ def cli_coordinates_input(board:list=initialise_board(10)):
 
     return coordinates
 
-def simple_game_loop():
+def simple_game_loop() -> None:
     '''
     A simple testing mode with no second player and
     one board using the simple placement algorithm.
@@ -96,7 +100,9 @@ def simple_game_loop():
         #Display the performance of a shot
     print('Game Over!')
 
-def showboard(board:list,past_moves:list=None):
+def showboard(board:list,
+              past_moves:list=None
+              ) -> None:
     '''
     Generate a gameboard to display in the command
     line.

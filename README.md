@@ -59,7 +59,7 @@ GAME = WebGame(10,algorithm='simple')
 ```
 
 ## Operating the Web Interface
-When The flask app is run, it will typically be hosted at http://127.0.0.1:5000/ unless flask says otherwise in console.  
+When The flask app is run, it will typically be hosted at http://127.0.0.1:5000/, however if not, the host adress will be ouotputted to the log.  
 
 In order to Configure ship placement,open http://127.0.0.1:5000/placement, this will load the placement screen and allow you to place ships with default size.
 
@@ -101,10 +101,12 @@ Then update the model based on the response, with either a value of 1 for a 'hit
 player.proccessattack(y,x,1)
 ```
 where y and x are the coordinates of the attack
-## Testing
+## Provided Testing
 Tests written using pytest can be found in the 'Tests' folder.If you are using an IDE such as VSC, or pycharm, the IDE will be able to automatically configure to run these tests.  
 
 The 'Test Attack Exists' section of the main script will fail testing due to the fact that it is written in a class-based style, if you edit the test to change its scope to main.WebApp it will work fine.
+## Adittional Testing
+Additional tests to check the AI player module is functioning correctly can be found in the file 'test_ai.py' in the tests folder.
 
 ## License
 

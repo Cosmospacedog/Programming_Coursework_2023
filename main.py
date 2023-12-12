@@ -28,9 +28,9 @@ class WebGame:
         self.winstate = None
         self.size = size
         self.ships = create_battleships()
-        self.players = None  
+        self.players = None
         self.algorithm = algorothm
-    def process_attack(self,raw_data):
+    def process_attack(self,raw_data:request):
         '''
         proccesses an attack from the front end and returns
         a dictionary containing the next AI move, Hit data
@@ -70,7 +70,7 @@ class WebGame:
         if self.winstate is not None:
             response['finished'] = f"{self.winstate} Wins!"
         return response
-    def shoot(self,coords:tuple,player:str,target:str):
+    def shoot(self,coords:tuple,player:str,target:str) -> bool:
         '''
         Processes an attack on a given target's board,
         and stores the initial coordinates in the players
@@ -124,7 +124,7 @@ class WebGame:
                     if player != player_name:
                         return player
         return None
-    def newgame(self):
+    def newgame(self) -> None:
         '''
         Generates a new game when the page is refreshed.
         '''
@@ -168,7 +168,7 @@ GAME = WebGame(10)
 app = Flask(__name__)
 
 @app.route('/placement')
-def placement_interface(methods=['POST','GET']):
+def placement_interface():
     '''
     Render the ship placement template with appropriate
     paramiters.
