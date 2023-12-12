@@ -9,6 +9,19 @@ This Readme is written in markdown and is designed to be viewed in github or an 
 
 
 ![Alt Text](https://i.imgur.com/klWOMwY.gif)
+
+## Self-assesment
+I believe that the following fetures are complete to as satisfactory level, documented and entirely functional:
+
+- The components module is complete as outlinded in the spec and all functions perform normally.
+
+- The game_engine module is complete as outlined and when run as main, the simple game loop function runs with all functions performing to spec.
+
+- The mp_game_engine module is completed to the same level and  the ai_opponent_game_loop runs when operated as main, incuding an ascii art interface.
+
+- The main module strays from spec slightly, in the fact that i chose to use object-oriented programming in order to avoid an over-abundance of global variables, which does not comply with pylint styling. However the module performs perfectly, and the flask web app operates with full functionality. One byproduct of this choice means one test, 'test_attack_exists' will fail due to the function being within a class, and not a property of the module itself. This can be rectified by changing the scope of the test as outlined later in the testing section of the readme.
+
+- The battleships_ai module is my solution to the extension task of improving the AI opponent. I believe it works well and in my personal testing can beat the vast majority of human opponents. Initially i designed the AI opponent with a Q-Learning model in mind, but i decided to go with a statistical model as it was easier for the end-user to configure and it performed better in the majority of games. This AI is fully intergrated into the main module by default, and can be easily disabled if the user would rather face a simpler opponent.
 ## Installation
 
 Compatible with python 3.7+  
